@@ -44,18 +44,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "rest_framework",
-    'rest_framework_simplejwt',
-    'drf_yasg',
-    'corsheaders',
-    'django_filters',
-    'djoser',
-
-
+    "rest_framework_simplejwt",
+    "djoser",
     "users",
     "ads",
     "redoc",
+    "corsheaders",  # разрешить доступ из разных источников (разное происхождение)
+    "drf_yasg",
+    "phonenumber_field",
+    "django_filters",
 ]
 
 
@@ -90,28 +88,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "skymarket.wsgi.application"
 
+TOTAL_ON_PAGE = 8
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.IsAuthenticated',
-        ],
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': TOTAL_ON_PAGE,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
-
+    ),
 }
 
 DJOSER = {
-    'PASSWORD_RESET_CONFIRM_URL': 'reset_password_confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'user_activation/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.UserRegistrationSerializer',
-        'user': 'users.serializers.CurrentUserSerializer',
-        'current_user': 'users.serializers.CurrentUserSerializer',
+        'user_create': 'users.serializers.UserRegistrationSerializer'
     },
+    'LOGIN_FIELD': 'email'
 }
 
 
@@ -121,11 +112,11 @@ DJOSER = {
 
 DATABASES = {
     'default': {
-        'ENGINE': getenv('DATABASE_ENGINE'),
-        'NAME': getenv('POSTGRES_DB'),
-        'USER': getenv('POSTGRES_USER'),
-        'PASSWORD': getenv('POSTGRES_PASSWORD'),
-        'HOST': getenv('POSTGRES_HOST'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test_sky',
+        'USER': 'postgres',
+        'PASSWORD': '12345',
+        #'HOST': 'db',
     }
 }
 
@@ -192,15 +183,13 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
-    "https://read-only.example.com",
-    "https://read-and-write.example.com",
+    'http://example.com',
+    'https://example.com',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 
 SIMPLE_JWT = {

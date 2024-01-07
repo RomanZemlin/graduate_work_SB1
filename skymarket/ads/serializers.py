@@ -4,32 +4,29 @@ from .models import Comment, Ad
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author_first_name = serializers.CharField(source="author.first_name", read_only=True)
+    author_last_name = serializers.CharField(source="author.last_name", read_only=True)
+
     class Meta:
         model = Comment
-        fields = '__all__'
+        exclude = ('id', 'author')
 
 
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ('id', "image", "title", "price", "description")
+        fields = ('pk', 'image', 'title', 'price', 'description')
 
 
 class AdDetailSerializer(serializers.ModelSerializer):
-    author_first_name = serializers.SerializerMethodField()
-    author_last_name = serializers.SerializerMethodField()
-    phone = serializers.SerializerMethodField()
+    author_first_name = serializers.CharField(source="author.first_name", read_only=True)
+    author_last_name = serializers.CharField(source="author.last_name", read_only=True)
+    comments = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='text'
+    )
 
     class Meta:
         model = Ad
-        fields = ('id', "image", "title", "price", "phone", "description",
-                  "author_first_name", "author_last_name", "author_id")
-
-    def get_author_first_name(self, obj):
-        return obj.author.first_name
-
-    def get_author_last_name(self, obj):
-        return obj.author.last_name
-
-    def get_phone(self, obj):
-        return obj.author.phone
+        exclude = ('id',)

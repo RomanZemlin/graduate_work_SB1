@@ -1,24 +1,23 @@
 from rest_framework.permissions import BasePermission
 
+from users.models import UserRoles
 
-class CustomPermission(BasePermission):
+
+class IsAdmin(BasePermission):
+    message = "Access denied."
+
     def has_permission(self, request, view):
-        if view.action == 'list' and (request.user.is_anonymous or request.user.is_authenticated):
-            return True
-        elif request.method in ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] \
-                and request.user.is_authenticated:
-            return True
-        return False
+        return request.user and request.user.is_authenticated
 
-
-class UserPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
-        if request.user.role == 'user':
-            if request.method in ['GET', 'POST']:
-                return True
-            elif request.method in ['PUT', 'PATCH', 'DELETE'] and request.user == obj.author:
-                return True
-        elif request.user.role == 'admin' or request.user.is_superuser:
-            if request.method in ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']:
-                return True
-        return False
+        return request.user.role == UserRoles.ADMIN
+
+
+class IsOwner(BasePermission):
+    message = "Access denied."
+
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.author
