@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     "users",
     "ads",
     "redoc",
-    "corsheaders",  # разрешить доступ из разных источников (разное происхождение)
+    "corsheaders",
     "drf_yasg",
     "phonenumber_field",
     "django_filters",
@@ -113,10 +113,11 @@ DJOSER = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test_sky',
-        'USER': 'postgres',
-        'PASSWORD': '12345',
-        #'HOST': 'db',
+        'NAME': 'skymarket',
+        'USER': 'skymarket',
+        'PASSWORD': 'skymarket',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 

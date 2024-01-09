@@ -1,16 +1,18 @@
-from django.urls import include, path
-from rest_framework.routers import SimpleRouter
-from rest_framework_nested.routers import NestedSimpleRouter
+from django.urls import path
+from rest_framework import routers
 
-from .views import AdViewSet, CommentViewSet
+from .views import AdViewSet, CommentViewSet, AdMyListAPIView
+from rest_framework_nested.routers import NestedDefaultRouter
 
-ads_router = SimpleRouter()
-ads_router.register('ads', AdViewSet, basename='ads')
+router = routers.DefaultRouter()
+router.register(r'ads', AdViewSet)
 
-comments_router = NestedSimpleRouter(ads_router, 'ads', lookup='ad')
-comments_router.register('comments', CommentViewSet, basename='comments')
+ads_router = NestedDefaultRouter(router, r'ads', lookup='ad')
+ads_router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
-    path('', include(ads_router.urls)),
-    path('', include(comments_router.urls)),
+    path('ads/me/', AdMyListAPIView.as_view(), name='ad-my-list'),
 ]
+
+urlpatterns += router.urls
+urlpatterns += ads_router.urls

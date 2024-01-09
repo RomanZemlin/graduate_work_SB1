@@ -1,19 +1,17 @@
-from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer as BaseUserRegistrationSerializer
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
-    password = serializers.CharField(required=True)
-
     class Meta:
         model = User
-        exclude = ('id',)
+        fields = ('email', 'first_name', 'last_name', 'password', 'phone', 'image')
 
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('id', 'password')
+        fields = ('first_name', 'last_name', 'phone', 'id', 'email', 'image')
