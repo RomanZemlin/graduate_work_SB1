@@ -6,7 +6,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - ../.env
     restart: always
     ports:
     - "5432:5432"
@@ -22,16 +22,6 @@ services:
       - frontend:/app/build
     depends_on:
       - db
-
-  api:
-    build: ../skymarket/.
-    env_file:
-      - .env
-    ports:
-      - "8001:8001"
-    depends_on:
-      - db
-    command: bash -c "python manage.py migrate && python manage.py loadall && python manage.py runserver 0.0.0.0:8001"
 
   nginx:
     image: nginx:1.19.3
@@ -49,5 +39,5 @@ services:
       - frontend
 
 volumes:
-  postgres_data:  
+  postgres_data:
   frontend:

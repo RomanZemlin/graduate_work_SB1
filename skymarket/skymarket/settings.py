@@ -116,8 +116,7 @@ DATABASES = {
         'NAME': 'skymarket',
         'USER': 'skymarket',
         'PASSWORD': 'skymarket',
-        'HOST': 'db',
-        'PORT': '5432',
+        'HOST': 'localhost',
     }
 }
 

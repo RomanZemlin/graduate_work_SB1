@@ -9,11 +9,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="The_market API",
+      title="Skymarket API",
       default_version='v1',
-      description="The_market SPA backend API",
+      description="Skymarket SPA backend API",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="riv74x@gmail.com"),
+      contact=openapi.Contact(email="VhilSaR@yandex.ru"),
       license=openapi.License(name="Free Software License"),
    ),
    public=True,
